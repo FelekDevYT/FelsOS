@@ -62,5 +62,6 @@ public class CLIMode : IMode
         CommandManager.registerCommand(new ShutdownCommand());
         CommandManager.registerCommand(new RebootCommand());
         CommandManager.registerCommand(new CatCommand());
+        CommandManager.registerCommand(new CalcCommand());
     }
 }
