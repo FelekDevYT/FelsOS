@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using FenixOS.System.modes.cli;
 using FenixOS.System.utils;
 using NotImplementedException = System.NotImplementedException;
 
@@ -26,7 +27,12 @@ public class MkFileCommand : ICommand
         }
 
         String path = args[0].argument.Trim();
-        Kernel.FileSystem.createFile(path);
+        FSCode code = Kernel.FileSystem.createFile(path);
+        if (code.code != 0)
+        {
+            IO.Debug.error("Failed to create file at " + path + " with code " +  code.code);
+            return CommandReturn.error("Failed to create file at " + path);
+        }
         IO.Debug.ok("File " + path + " created");
         
         return CommandReturn.success("ok");

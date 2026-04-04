@@ -1,4 +1,5 @@
 ﻿using System;
+using FenixOS.System.modes.cli;
 using FenixOS.System.utils;
 using NotImplementedException = System.NotImplementedException;
 
@@ -25,7 +26,15 @@ public class RmCommand : ICommand
         }
 
         String path = args[0].argument.Trim();
-        Kernel.FileSystem.remove(path, true);
+        FSCode code = Kernel.FileSystem.remove(path, true);
+
+        if (code.code != 0)
+        {
+            IO.Debug.error("Failed to remove file/directory at " + path + " with code " +  code.code);   
+            return CommandReturn.error("Failed to remove file/directory at " + path);
+        }
+        
+        IO.Debug.ok("File/Directory removed at: " + path);
         
         return CommandReturn.success("ok");
     }

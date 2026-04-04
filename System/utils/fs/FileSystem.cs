@@ -14,12 +14,21 @@ public class FileSystem
         Cosmos.System.FileSystem.VFS.VFSManager.RegisterVFS(fileSystemInstance);
     }
     
-    public void createFile(String path)//TODO: add return code
+    public FSCode createFile(String path)
     {
+        if (File.Exists(getPath(path)))
+        {
+            return new FSCode(1);
+        } else if (Directory.Exists(getPath(path)))
+        {
+            return new FSCode(2);
+        }
+        
         fileSystemInstance.CreateFile(getPath(path));
+        return new FSCode(0);
     }
 
-    public void remove(String path, bool force)
+    public FSCode remove(String path, bool force)
     {
         //1. detect file or dir
         //2. if dir & force -> remove | !force ->> message
@@ -35,8 +44,7 @@ public class FileSystem
         }
         else
         {
-            //TODO: Should be specific code for this
-            return;
+            return new FSCode(1);
         }
 
         if (isFile)
@@ -50,12 +58,14 @@ public class FileSystem
                 if (!force)
                 {
                     IO.Debug.error("You should activate force mode.");//CODES IN NEXT UPDATE
-                    return;
+                    return new FSCode(2);
                 }
             }
             
             Directory.Delete(getPath(path), true);
         }
+        
+        return new FSCode(0);
     }
 
     public void changeDirectory(String path)
@@ -73,12 +83,21 @@ public class FileSystem
         }
     }
 
-    public void createDirectory(String path)//TODO: add return code
+    public FSCode createDirectory(String path)
     {
+        if (File.Exists(getPath(path)))
+        {
+            return new FSCode(1);
+        } else if (Directory.Exists(getPath(path)))
+        {
+            return new FSCode(2);
+        }
+        
         fileSystemInstance.CreateDirectory(getPath(path));
+        return new FSCode(0);
     }
 
-    public void writeFile(String path, String content)//TODO: add return code
+    public FSCode writeFile(String path, String content)
     {
         try
         {
@@ -87,7 +106,10 @@ public class FileSystem
         catch (Exception e)
         {
             IO.Debug.error("Error writing file: " + e);
+            return new FSCode(e.GetHashCode());//TODO: maybe custom error(in 1.0 or later), not needed rn
         }
+        
+        return new FSCode(0);
     }
 
     public String getPath(String path)
