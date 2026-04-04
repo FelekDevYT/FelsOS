@@ -83,6 +83,12 @@ public class FileSystem
         }
     }
 
+    public String readFile(String path)//TODO: add FSCode
+    {
+        String content = File.ReadAllText(getPath(path));
+        return content;
+    }
+
     public FSCode createDirectory(String path)
     {
         if (File.Exists(getPath(path)))

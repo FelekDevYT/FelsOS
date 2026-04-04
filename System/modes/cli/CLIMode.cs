@@ -58,5 +58,6 @@ public class CLIMode : IMode
         CommandManager.registerCommand(new DiskInfoCommand());
         CommandManager.registerCommand(new ShutdownCommand());
         CommandManager.registerCommand(new RebootCommand());
+        CommandManager.registerCommand(new CatCommand());
     }
 }
