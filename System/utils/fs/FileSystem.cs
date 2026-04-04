@@ -149,4 +149,16 @@ public class FileSystem
             }
         }
     }
+    
+    public String getFileSystemType(string drive = "0:\\") {
+        return fileSystemInstance.GetFileSystemType(drive);
+    }
+
+    public long getAvailableFreeSpace(string drive = "0:\\") {
+        return fileSystemInstance.GetAvailableFreeSpace(drive);
+    }
+
+    public long getTotalSize(string drive = "0:\\") {
+        return fileSystemInstance.GetTotalSize(drive);
+    }
 }
