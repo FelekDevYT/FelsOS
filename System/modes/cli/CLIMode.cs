@@ -52,5 +52,8 @@ public class CLIMode : IMode
         CommandManager.registerCommand(new ClearCommand());
         CommandManager.registerCommand(new RetcodeCommand());
         CommandManager.registerCommand(new HelpCommand());
+        CommandManager.registerCommand(new MkFileCommand());
+        CommandManager.registerCommand(new MkDirCommand());
+        CommandManager.registerCommand(new RmCommand());
     }
 }
