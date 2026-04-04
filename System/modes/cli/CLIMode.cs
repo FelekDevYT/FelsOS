@@ -1,4 +1,5 @@
 ﻿using System;
+using Cosmos.Core.Memory;
 using FenixOS.System.FShell;
 using FenixOS.System.FShell.commands;
 using FenixOS.System.utils;
@@ -37,6 +38,8 @@ public class CLIMode : IMode
         Array.Copy(parts, 1, args, 0, parts.Length - 1);// IT TOOK 1 HOUR!
         //i hate C# btw
         CommandManager.execute(commandName, args);
+
+        Heap.Collect();
     }
 
     public void stop()

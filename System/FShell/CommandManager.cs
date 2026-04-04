@@ -16,6 +16,13 @@ public class CommandManager
 
     public void registerCommand(ICommand command)
     {
+        if (registeredCommands.ContainsKey(command.getCommandName()))
+        {
+            IO.Debug.error("Command already registered.");
+            IO.Debug.error("Please contact developer to solve the problem.");
+            return;
+        }
+        
         registeredCommands.Add(command.getCommandName(), command);
     }
 
