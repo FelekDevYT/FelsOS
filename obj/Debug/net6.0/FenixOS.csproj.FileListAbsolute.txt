@@ -1,0 +1,12 @@
+C:\Users\user\source\repos\FenixOS\FenixOS\bin\Debug\net6.0\FenixOS.deps.json
+C:\Users\user\source\repos\FenixOS\FenixOS\bin\Debug\net6.0\FenixOS.dll
+C:\Users\user\source\repos\FenixOS\FenixOS\bin\Debug\net6.0\FenixOS.pdb
+C:\Users\user\source\repos\FenixOS\FenixOS\obj\Debug\net6.0\FenixOS.csproj.AssemblyReference.cache
+C:\Users\user\source\repos\FenixOS\FenixOS\obj\Debug\net6.0\FenixOS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\FenixOS\FenixOS\obj\Debug\net6.0\FenixOS.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\FenixOS\FenixOS\obj\Debug\net6.0\FenixOS.AssemblyInfo.cs
+C:\Users\user\source\repos\FenixOS\FenixOS\obj\Debug\net6.0\FenixOS.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\FenixOS\FenixOS\obj\Debug\net6.0\FenixOS.dll
+C:\Users\user\source\repos\FenixOS\FenixOS\obj\Debug\net6.0\refint\FenixOS.dll
+C:\Users\user\source\repos\FenixOS\FenixOS\obj\Debug\net6.0\FenixOS.pdb
+C:\Users\user\source\repos\FenixOS\FenixOS\obj\Debug\net6.0\ref\FenixOS.dll
