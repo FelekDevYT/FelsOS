@@ -16,6 +16,12 @@ public class DrawTool
         this.position = position;
     }
 
+    public void updateCtx(Vec3 pos, Vec3 size)
+    {
+        this.position = pos;
+        this.drawingSize = size;
+    }
+
     public void drawRectange(Color color, int x, int y, int width, int height)
     {
         int relativeX = position.x + x;

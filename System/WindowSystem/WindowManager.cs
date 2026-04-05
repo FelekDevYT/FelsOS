@@ -11,11 +11,19 @@ public class WindowManager
     private List<AbstractWindow> windows;
     private Canvas canvas;
 
+    public AbstractWindow takedWindow;
+    
+    private int dragOffsetX;
+    private int dragOffsetY;
+    private bool isDragging = false;
+    private DrawTool _cachedTool;
+
     public void init(Canvas canvas)
     {
         this.canvas = canvas;
         
         windows = new List<AbstractWindow>();
+        _cachedTool = new DrawTool(canvas, new Vec3(0, 0), new Vec3(0, 0));
     }
     
     public void addWindow(AbstractWindow abstractWindow)
@@ -33,39 +41,87 @@ public class WindowManager
 
     public void updateAllWindows()
     {
+        int mx = (int)MouseManager.X;
+        int my = (int)MouseManager.Y;
+        
+        handleInput(mx, my);
+        
+        drawAll(mx, my);
+    }
+
+    private void drawAll(int mx, int my)
+    {
         foreach (AbstractWindow window in windows)
         {
-            canvas.DrawFilledRectangle(Color.DarkGray, window.getPosition().x, window.getPosition().y, window.getDefaultSize().x, window.getDefaultSize().y);
+            Vec3 pos = window.getPosition();
+            Vec3 size = window.getDefaultSize();
             
-            canvas.DrawFilledRectangle(Color.DarkSlateGray, 
-                window.getPosition().x, window.getPosition().y - 22,
-                window.getDefaultSize().x, 22
-            );
-            canvas.DrawString(window.getTitle(), Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, 
-                window.getPosition().x+2,  window.getPosition().y-20);
-            
-            canvas.DrawRectangle(Color.Black,  window.getPosition().x, window.getPosition().y - 22,
-                window.getDefaultSize().x, window.getDefaultSize().y + 22);
-            
-            window.update(new DrawTool(canvas, window.getPosition(), window.getDefaultSize()));
+            drawWindowDecoration(window);
+            _cachedTool.updateCtx(pos, size);
+            window.update(_cachedTool);
         }
-
-        foreach (AbstractWindow window in windows)
+    }
+    
+    private void handleInput(int mx, int my)
+    {
+        if (MouseManager.MouseState == MouseState.Left)
         {
-            int mouseX = (int) MouseManager.X;
-            int mouseY = (int) MouseManager.Y;
-            if (mouseY >= window.getPosition().y - 22 &&
-                mouseY <= window.getPosition().y &&
-                mouseX >= window.getPosition().x &&
-                mouseX <= window.getPosition().x + window.getDefaultSize().x)
-            {
-                Kernel.eventManager.callEvent(new MouseOnTitleEvent(new DrawTool(canvas, window.getPosition(), window.getDefaultSize())));
+            if (takedWindow != null){
+                int newX = mx - dragOffsetX;
+                int newY = my - dragOffsetY;
 
-                if (MouseManager.MouseState == MouseState.Left)
+                if (newY < 22) newY = 22;
+
+                takedWindow.setPosition(new Vec3(newX, newY));
+            }
+            else
+            {
+                for (int i = windows.Count - 1; i >= 0; i--)
                 {
-                    Kernel.eventManager.callEvent(new MouseClickedTitleEvent(new DrawTool(canvas,  window.getPosition(), window.getDefaultSize())));
+                    if (isMouseOverTitle(windows[i], mx, my))
+                    {
+                        takedWindow = windows[i];
+                        dragOffsetX = mx - takedWindow.getPosition().x;
+                        dragOffsetY = my - takedWindow.getPosition().y;
+                        
+                        var w = windows[i];
+                        windows.RemoveAt(i);
+                        windows.Add(w);
+                        break;
+                    }
                 }
             }
         }
+        else
+        {
+            takedWindow = null;
+        }
+    }
+
+    private bool isMouseOverTitle(AbstractWindow window, int mouseX, int mouseY)
+    {
+        return mouseY >= window.getPosition().y - 22 &&
+               mouseY <= window.getPosition().y &&
+               mouseX >= window.getPosition().x &&
+               mouseX <= window.getPosition().x + window.getDefaultSize().x;
+    }
+
+    private void drawWindowDecoration(AbstractWindow window)
+    {
+        var pos = window.getPosition();
+        if (pos.x < 0) pos.x = 0;
+        if (pos.y < 25) pos.y = 25;
+        
+        canvas.DrawFilledRectangle(Color.DarkGray, window.getPosition().x, window.getPosition().y, window.getDefaultSize().x, window.getDefaultSize().y);
+            
+        canvas.DrawFilledRectangle(Color.DarkSlateGray, 
+            window.getPosition().x, window.getPosition().y - 22,
+            window.getDefaultSize().x, 22
+        );
+        canvas.DrawString(window.getTitle(), Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, 
+            window.getPosition().x+2,  window.getPosition().y-20);
+            
+        canvas.DrawRectangle(Color.Black,  window.getPosition().x, window.getPosition().y - 22,
+            window.getDefaultSize().x, window.getDefaultSize().y + 22);
     }
 }
