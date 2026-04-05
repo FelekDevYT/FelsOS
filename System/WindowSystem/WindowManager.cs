@@ -80,6 +80,12 @@ public class WindowManager
                 {
                     if (isMouseOverTitle(windows[i], mx, my))
                     {
+                        if (isMouseOverClose(windows[i], mx, my))
+                        {
+                            windows.RemoveAt(i);
+                            return;
+                        }
+                        
                         takedWindow = windows[i];
                         dragOffsetX = mx - takedWindow.getPosition().x;
                         dragOffsetY = my - takedWindow.getPosition().y;
@@ -120,8 +126,23 @@ public class WindowManager
         );
         canvas.DrawString(window.getTitle(), Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, 
             window.getPosition().x+2,  window.getPosition().y-20);
+        
+        canvas.DrawFilledRectangle(Color.DarkRed, window.getPosition().x+window.getDefaultSize().x-22, window.getPosition().y - 22,
+            22, 22);
+        canvas.DrawLine(Color.WhiteSmoke, window.getPosition().x+window.getDefaultSize().x-20, window.getPosition().y - 20,
+            window.getPosition().x+window.getDefaultSize().x-2, window.getPosition().y - 2);
+        canvas.DrawLine(Color.WhiteSmoke, window.getPosition().x+window.getDefaultSize().x-2, window.getPosition().y - 20,
+            window.getPosition().x+window.getDefaultSize().x-20, window.getPosition().y - 2);
             
         canvas.DrawRectangle(Color.Black,  window.getPosition().x, window.getPosition().y - 22,
             window.getDefaultSize().x, window.getDefaultSize().y + 22);
+    }
+    
+    private bool isMouseOverClose(AbstractWindow window, int mx, int my)
+    {
+        return mx >= window.getPosition().x + window.getDefaultSize().x - 22 &&
+               mx <= window.getPosition().x + window.getDefaultSize().x &&
+               my >= window.getPosition().y - 22 &&
+               my <= window.getPosition().y;
     }
 }
