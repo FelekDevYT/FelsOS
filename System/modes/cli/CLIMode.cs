@@ -44,7 +44,7 @@ public class CLIMode : IMode
 
     public void stop()
     {
-        //not needed
+        Heap.Collect();
     }
 
     private void registerDefaultCommands()
@@ -63,5 +63,6 @@ public class CLIMode : IMode
         CommandManager.registerCommand(new RebootCommand());
         CommandManager.registerCommand(new CatCommand());
         CommandManager.registerCommand(new CalcCommand());
+        CommandManager.registerCommand(new GuiCommand());
     }
 }

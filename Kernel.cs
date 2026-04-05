@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using FenixOS.System.EventSystem;
+using FenixOS.System.EventSystem.events;
 using FenixOS.System.modes;
 using FenixOS.System.modes.cli;
+using FenixOS.System.modes.gui;
 using Sys = Cosmos.System;
 
 namespace FenixOS
@@ -12,7 +15,10 @@ namespace FenixOS
         public static IMode cli;
         public static IMode gui;
 
+        public static IMode currentMode;
+
         public static FileSystem FileSystem;
+        public static EventManager eventManager;
 
         protected override void OnBoot()
         {
@@ -20,6 +26,12 @@ namespace FenixOS
             
             //custom
             cli = new CLIMode();
+            gui = new GUIMode();
+
+            currentMode = cli;
+            
+            eventManager = new EventManager();
+            eventManager.init();
         }
 
         protected override void BeforeRun()
@@ -27,12 +39,12 @@ namespace FenixOS
             FileSystem = new FileSystem();
             FileSystem.registerFileSystem();
             
-            cli.start();
+            currentMode.start();
         }
 
         protected override void Run()
         {
-            cli.update();
+            currentMode.update();
         }
     }
 }
