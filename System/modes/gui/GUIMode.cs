@@ -15,6 +15,7 @@ public class GUIMode : IMode
     private WindowManager windowManager;
     private FPSTimer timer;
     private Bitmap cursor;
+    private ToolPanel panel;
     
     public void start()
     {
@@ -27,6 +28,8 @@ public class GUIMode : IMode
         
         windowManager = new WindowManager();
         windowManager.init(canvas);
+
+        panel = new ToolPanel(new Vec3(0, Data.SCREEN_HEIGHT - Data.TOOLPANEL_HEIGHT), new Vec3(Data.TOOLPANEL_WIDTH, Data.TOOLPANEL_HEIGHT));
         
         windowManager.addWindow(new TestAbstractWindow(new Vec3(100, 100), new Vec3(800, 500)));
         timer = new FPSTimer();
@@ -41,6 +44,8 @@ public class GUIMode : IMode
         canvas.DrawFilledRectangle(Color.Blue, 0, 0, Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT);//background
         
         windowManager.updateAllWindows();
+        panel.update((int) MouseManager.X,(int) MouseManager.Y);
+        panel.draw(canvas);
         
         canvas.DrawImageAlpha(cursor, (int) MouseManager.X, (int) MouseManager.Y);
         

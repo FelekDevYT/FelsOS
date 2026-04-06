@@ -22,10 +22,12 @@
 
     <ItemGroup>
       <None Remove="assets\cursor.bmp" />
+      <None Remove="assets\logo.bmp" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Include="assets\cursor.bmp" />
+      <EmbeddedResource Include="assets\logo.bmp" />
     </ItemGroup>
 
     <ItemGroup>
