@@ -72,7 +72,7 @@ public class WindowManager
 
                 if (newY < 22) newY = 22;
 
-                takedWindow.setPosition(new Vec3(newX, newY));
+                takedWindow.setPosition(newX, newY);
             }
             else
             {

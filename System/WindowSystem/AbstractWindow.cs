@@ -19,9 +19,10 @@ public abstract class AbstractWindow
         return windowPosition;
     }
 
-    public void setPosition(Vec3 windowPosition)
+    public void setPosition(int x, int y)
     {
-        this.windowPosition = windowPosition;
+        this.windowPosition.x = x;
+        this.windowPosition.y = y;
     }
 
     public Vec3 getSize()
