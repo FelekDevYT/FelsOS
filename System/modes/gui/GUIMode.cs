@@ -14,8 +14,11 @@ public class GUIMode : IMode
     private Canvas canvas;
     private WindowManager windowManager;
     private FPSTimer timer;
-    private Bitmap cursor;
     private ToolPanel panel;
+    private Cursor cursor;
+    
+    private bool needsFullRedraw = true;
+    private int ticks;
     
     public void start()
     {
@@ -24,7 +27,8 @@ public class GUIMode : IMode
         MouseManager.ScreenHeight = (uint) Data.SCREEN_HEIGHT;
         MouseManager.MouseSensitivity = 1.2f;
 
-        cursor = new Bitmap(ResourceManager.cursorIcon);
+        Bitmap c = new Bitmap(ResourceManager.cursorIcon);
+        cursor = new Cursor(c);
         
         windowManager = new WindowManager();
         windowManager.init(canvas);
@@ -40,22 +44,47 @@ public class GUIMode : IMode
     public void update()
     {
         timer.Update();
-        
-        canvas.DrawFilledRectangle(Color.Blue, 0, 0, Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT);//background
-        
-        windowManager.updateAllWindows();
-        panel.update((int) MouseManager.X,(int) MouseManager.Y);
-        panel.draw(canvas);
-        
-        canvas.DrawImageAlpha(cursor, (int) MouseManager.X, (int) MouseManager.Y);
-        
-        canvas.DrawString(timer.getFps().ToString(),Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, 10, 10);
-        
+        if (MouseManager.MouseState != MouseState.None)
+        {
+            needsFullRedraw = true;
+        }
+
+        cursor.genBackground(canvas);
+
+        if (needsFullRedraw)
+        {
+            canvas.DrawFilledRectangle(Color.Blue, 0, 0, Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT);
+            windowManager.updateAllWindows();
+            panel.update((int) MouseManager.X, (int) MouseManager.Y);
+            panel.draw(canvas);
+
+            if (MouseManager.MouseState == MouseState.None)
+            {
+                needsFullRedraw = false;
+            }
+        }
+        else 
+        {
+            panel.update((int) MouseManager.X, (int) MouseManager.Y);
+        }
+
+        cursor.draw(canvas, (int) MouseManager.X, (int)MouseManager.Y);
+        canvas.DrawFilledRectangle(Color.Blue, 10, 10, 100, 20); 
+        canvas.DrawString("FPS: " + timer.getFps(), Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.Black, 10, 10);
         canvas.Display();
+
+        ticks++;
+        if (ticks >= 4)
+        {
+            ticks = 0;
+            Heap.Collect();
+        }
     }
 
     public void stop()
     {
-        
+        canvas.Clear(Color.Black);
+        canvas.Display();
+        canvas.Disable();
     }
 }
