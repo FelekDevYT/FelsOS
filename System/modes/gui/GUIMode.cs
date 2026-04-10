@@ -17,7 +17,7 @@ public class GUIMode : IMode
     private ToolPanel panel;
     private Cursor cursor;
     
-    private bool needsFullRedraw = true;
+    public static RedrawManager redrawManager;
     private int ticks;
     
     public void start()
@@ -39,29 +39,23 @@ public class GUIMode : IMode
         timer = new FPSTimer();
         
         windowManager.startWindowManager();
+
+        redrawManager = new RedrawManager();
+        redrawManager.requestFullRedraw();
     }
 
     public void update()
     {
         timer.Update();
-        if (MouseManager.MouseState != MouseState.None)
-        {
-            needsFullRedraw = true;
-        }
 
         cursor.genBackground(canvas);
 
-        if (needsFullRedraw)
+        if (redrawManager.needsFullRedraw)
         {
             canvas.DrawFilledRectangle(Color.Blue, 0, 0, Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT);
             windowManager.updateAllWindows();
             panel.update((int) MouseManager.X, (int) MouseManager.Y);
             panel.draw(canvas);
-
-            if (MouseManager.MouseState == MouseState.None)
-            {
-                needsFullRedraw = false;
-            }
         }
         else 
         {
@@ -79,6 +73,8 @@ public class GUIMode : IMode
             ticks = 0;
             Heap.Collect();
         }
+        
+        redrawManager.tick();
     }
 
     public void stop()

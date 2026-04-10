@@ -3,6 +3,7 @@ using System.Drawing;
 using Cosmos.System;
 using Cosmos.System.Graphics;
 using FenixOS.System.EventSystem.events;
+using FenixOS.System.modes.gui;
 
 namespace FenixOS.System.WindowSystem;
 
