@@ -1,43 +1,28 @@
 ﻿using System;
+using Cosmos.System;
 using FenixOS.System.EventSystem;
+using FenixOS.System.WindowSystem.widget;
 
 namespace FenixOS.System.WindowSystem;
 
 public abstract class AbstractWindow
 {
-    private Vec3 windowPosition;
-    private Vec3 windowSize;
-
-    public AbstractWindow(Vec3 pos, Vec3 size)
-    {
-        this.windowPosition = pos;
-        this.windowSize = size;
-    }
-
-    public Vec3 getPosition()
-    {
-        return windowPosition;
-    }
-
-    public void setPosition(int x, int y)
-    {
-        this.windowPosition.x = x;
-        this.windowPosition.y = y;
-    }
-
-    public Vec3 getSize()
-    {
-        return windowSize;
-    }
-
-    public void setSize(Vec3 windowSize)
-    {
-        this.windowSize = windowSize;
-    }
-
     public abstract String getTitle();
-    public abstract Vec3 getDefaultSize();
-
+    protected ContainerWidget content { get; set; } = new ContainerWidget();
     public abstract void start();
-    public abstract void update(DrawTool tool);
+    public virtual void update(DrawTool tool)
+    {
+        content.draw(tool);
+    }
+    
+    public bool HandleMouse(int mx, int my, MouseState state)
+    {
+        int rx = mx - (int)MouseManager.X;
+        int ry = my - (int)MouseManager.Y;
+
+        if (state == MouseState.Left) return content.onMouseDown(rx, ry);
+        if (state == MouseState.None) content.onMouseUp(rx, ry);
+        content.onMouseMove(rx, ry);
+        return false;
+    }
 }

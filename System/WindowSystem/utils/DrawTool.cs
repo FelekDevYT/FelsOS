@@ -5,18 +5,18 @@ namespace FenixOS.System.WindowSystem;
 
 public class DrawTool
 {
-    private Canvas canvas;
-    private Vec3 drawingSize;
-    private Vec3 position;
+    public Canvas canvas;
+    private Vec2 drawingSize;
+    private Vec2 position;
 
-    public DrawTool(Canvas canvas, Vec3 position, Vec3 drawingSize)
+    public DrawTool(Canvas canvas, Vec2 position, Vec2 drawingSize)
     {
         this.canvas = canvas;
         this.drawingSize = drawingSize;
         this.position = position;
     }
 
-    public void updateCtx(Vec3 pos, Vec3 size)
+    public void updateCtx(Vec2 pos, Vec2 size)
     {
         this.position = pos;
         this.drawingSize = size;

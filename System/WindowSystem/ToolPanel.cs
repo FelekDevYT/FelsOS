@@ -1,4 +1,6 @@
-﻿using Cosmos.System;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using Cosmos.System;
 using Cosmos.System.Graphics;
 using FenixOS.System.utils;
 
@@ -6,14 +8,14 @@ namespace FenixOS.System.WindowSystem;
 
 public class ToolPanel
 {
-    public Vec3 position;
-    public Vec3 size;
+    public Vec2 position;
+    public Vec2 size;
 
     public Bitmap logo;
 
     private bool isMenuopened = false;
 
-    public ToolPanel(Vec3 pos, Vec3 size)
+    public ToolPanel(Vec2 pos, Vec2 size)
     {
         this.position = pos;
         this.size = size;
@@ -21,23 +23,35 @@ public class ToolPanel
         logo = new Bitmap(ResourceManager.logoIcon);
     }
 
-    public void draw(Canvas canvas)
+    public void draw(Canvas canvas, List<AbstractWindow> allWindows, int activeIdx)
     {
         canvas.DrawFilledRectangle(Data.ToolPanelBackgroundColor, position.x, position.y, size.x, size.y);
-        canvas.DrawImageAlpha(logo, position.x, position.y);
+        canvas.DrawImageAlpha(logo, position.x + 5, position.y + 5);
 
-        if (isMenuopened)
+        int btnWidth = 150;
+        for (int i = 0; i < allWindows.Count; i++)
         {
-            canvas.DrawFilledRectangle(Data.MenuPanelBackgroundColor, 
-                position.x, position.y - Data.MENU_WIDTH, Data.MENU_WIDTH, Data.MENU_HEIGHT);
+            int bx = position.x + 80 + (i * (btnWidth + 10));
+            int by = position.y + 10;
+            
+            Color btnColor = (i == activeIdx) ? Color.SteelBlue : Color.DarkGray;
+        
+            canvas.DrawFilledRectangle(btnColor, bx, by, btnWidth, size.y - 20);
+            canvas.DrawString(allWindows[i].getTitle(), 
+                Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.White, bx + 5, by + 15);
         }
     }
 
-    public void update(int mx, int my)
+    public int checkClick(int mx, int my, int windowCount)
     {
-        if (MouseManager.LastMouseState == MouseState.None && mx >= position.x && mx <= position.x + size.x && my >= position.y && my <= position.y + size.y && MouseManager.MouseState == MouseState.Left)
+        if (my < position.y) return -1;
+
+        int btnWidth = 150;
+        for (int i = 0; i < windowCount; i++)
         {
-            isMenuopened = !isMenuopened;
+            int bx = position.x + 80 + (i * (btnWidth + 10));
+            if (mx >= bx && mx <= bx + btnWidth) return i;
         }
+        return -1;
     }
 }
