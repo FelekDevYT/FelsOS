@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cosmos.System;
 using NotImplementedException = System.NotImplementedException;
 
 namespace FenixOS.System.WindowSystem.widget;
@@ -51,6 +52,24 @@ public class ContainerWidget : Widget
         {
             var child = _children[i];
             if (child.enabled && child.visible) child.onMouseMove(x, y);
+        }
+    }
+    
+    public override void onKeyPressed(KeyEvent key)
+    {
+        for (int i = 0; i < _children.Count; i++)
+        {
+            var child = _children[i];
+            if (child.enabled && child.visible) child.onKeyPressed(key);
+        }
+    }
+    
+    public override void onMouseScroll(int deltaX, int deltaY)
+    {
+        for (int i = 0; i < _children.Count; i++)
+        {
+            var child = _children[i];
+            if (child.enabled && child.visible) child.onMouseScroll(deltaX, deltaY);
         }
     }
 }

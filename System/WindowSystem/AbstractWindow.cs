@@ -22,4 +22,19 @@ public abstract class AbstractWindow
         content.onMouseMove(mx, my);
         return false;
     }
+
+    public virtual void handleMouseScroll(int deltaX, int deltaY)
+    {
+        content.onMouseScroll(deltaX, deltaY);
+    }
+
+    public virtual void handleKeyboard(KeyEvent key)
+    {
+        content.onKeyPressed(key);
+    }
+    
+    public virtual void tick()
+    {
+        content.update();
+    }
 }

@@ -1,4 +1,5 @@
-﻿using Cosmos.System.Graphics;
+﻿using Cosmos.System;
+using Cosmos.System.Graphics;
 
 namespace FenixOS.System.WindowSystem.widget;
 
@@ -15,4 +16,6 @@ public interface IWidget
     bool onMouseDown(int x, int y);
     void onMouseUp(int x, int y);
     void onMouseMove(int x, int y);
+    void onKeyPressed(KeyEvent key);
+    void onMouseScroll(int deltaX, int deltaY); 
 }

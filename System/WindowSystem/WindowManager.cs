@@ -41,22 +41,19 @@ public class WindowManager
 
     public void update()
     {
-        for (int i = 0; i < windows.Count; i++)
+        if (activeIndex >= 0 && activeIndex < windows.Count)
         {
-            windows[i].update(_cachedTool);
+            windows[activeIndex].update(_cachedTool);
         }
     }
     
     
     public void setActive(int index)
     {
-        if (index >= 0 && index < windows.Count)
+        if (index >= 0 && index < windows.Count && activeIndex != index)
         {
-            var win = windows[index];
-            windows.RemoveAt(index);
-            windows.Add(win);
-            activeIndex = windows.Count - 1;
-            modes.gui.GUIMode.redrawManager.requestFullRedraw();
+            activeIndex = index;
+            GUIMode.redrawManager.requestFullRedraw();
         }
     }
 

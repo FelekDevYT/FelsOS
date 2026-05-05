@@ -36,9 +36,8 @@ public class GUIMode : IMode
         panel = new ToolPanel(new Vec2(0, Data.SCREEN_HEIGHT - Data.TOOLPANEL_HEIGHT), new Vec2(Data.TOOLPANEL_WIDTH, Data.TOOLPANEL_HEIGHT));
         
         windowManager.addWindow(new TestAbstractWindow());
+        windowManager.addWindow(new TerminalWindow());
         timer = new FPSTimer();
-        
-        windowManager.startWindowManager();
 
         redrawManager = new RedrawManager();
         redrawManager.requestFullRedraw();
@@ -58,6 +57,17 @@ public class GUIMode : IMode
             var activeWin = windowManager.getWindows()[windowManager.getActiveIndex()];
             activeWin.HandleMouse(mx, my, MouseManager.MouseState);
         }
+        
+        var currentActiveWin = windowManager.getWindows()[windowManager.getActiveIndex()];
+        if (MouseManager.ScrollDelta != 0)
+        {
+            currentActiveWin.handleMouseScroll(0, MouseManager.ScrollDelta);
+        }
+        if (KeyboardManager.TryReadKey(out var key))
+        {
+            currentActiveWin.handleKeyboard(key);
+        }
+        currentActiveWin.tick();
 
         bool needsRender = redrawManager.needsFullRedraw;
         redrawManager.tick();
@@ -69,8 +79,8 @@ public class GUIMode : IMode
             panel.draw(canvas, windowManager.getWindows(), windowManager.getActiveIndex());
         }
 
-        canvas.DrawFilledRectangle(Color.Blue, 8, 8, 100, 20);
-        canvas.DrawString("FPS: " + timer.getFps(), Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.White, 10, 10);
+        //canvas.DrawFilledRectangle(Color.Blue, 8, 8, 100, 20);
+        //canvas.DrawString("FPS: " + timer.getFps(), Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.White, 10, 10);
         cursor.draw(canvas, (int)MouseManager.X, (int)MouseManager.Y);
         canvas.Display();
         

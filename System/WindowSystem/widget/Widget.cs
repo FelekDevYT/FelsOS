@@ -1,4 +1,5 @@
-﻿using NotImplementedException = System.NotImplementedException;
+﻿using Cosmos.System;
+using NotImplementedException = System.NotImplementedException;
 
 namespace FenixOS.System.WindowSystem.widget;
 
@@ -9,6 +10,8 @@ public abstract class Widget : IWidget
     public bool visible { get; set; } = true;
     public bool enabled { get; set; } = true;
     public IWidget Parent { get; set; }
+    public virtual void onKeyPressed(KeyEvent key) { }
+    public virtual void onMouseScroll(int deltaX, int deltaY) { }
 
     public void getAbsoluteposition(out int x, out int y)
     {

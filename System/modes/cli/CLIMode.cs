@@ -15,7 +15,7 @@ public class CLIMode : IMode
     {
         //let's start
         CommandManager = new CommandManager();
-        registerDefaultCommands();
+        CommandManager = registerDefaultCommands();
         IO.printlncol("Welcome to " + Data.OS_FULL, ConsoleColor.DarkYellow);
     }
 
@@ -47,22 +47,26 @@ public class CLIMode : IMode
         Heap.Collect();
     }
 
-    private void registerDefaultCommands()
+    public static CommandManager registerDefaultCommands()
     {
-        CommandManager.registerCommand(new InfoCommand());
-        CommandManager.registerCommand(new CdCommand());
-        CommandManager.registerCommand(new lsCommand());
-        CommandManager.registerCommand(new ClearCommand());
-        CommandManager.registerCommand(new RetcodeCommand());
-        CommandManager.registerCommand(new HelpCommand());
-        CommandManager.registerCommand(new MkFileCommand());
-        CommandManager.registerCommand(new MkDirCommand());
-        CommandManager.registerCommand(new RmCommand());
-        CommandManager.registerCommand(new DiskInfoCommand());
-        CommandManager.registerCommand(new ShutdownCommand());
-        CommandManager.registerCommand(new RebootCommand());
-        CommandManager.registerCommand(new CatCommand());
-        CommandManager.registerCommand(new CalcCommand());
-        CommandManager.registerCommand(new GuiCommand());
+        CommandManager cmd = new CommandManager();
+        
+        cmd.registerCommand(new InfoCommand());
+        cmd.registerCommand(new CdCommand());
+        cmd.registerCommand(new lsCommand());
+        cmd.registerCommand(new ClearCommand());
+        cmd.registerCommand(new RetcodeCommand());
+        cmd.registerCommand(new HelpCommand());
+        cmd.registerCommand(new MkFileCommand());
+        cmd.registerCommand(new MkDirCommand());
+        cmd.registerCommand(new RmCommand());
+        cmd.registerCommand(new DiskInfoCommand());
+        cmd.registerCommand(new ShutdownCommand());
+        cmd.registerCommand(new RebootCommand());
+        cmd.registerCommand(new CatCommand());
+        cmd.registerCommand(new CalcCommand());
+        cmd.registerCommand(new GuiCommand());
+
+        return cmd;
     }
 }
