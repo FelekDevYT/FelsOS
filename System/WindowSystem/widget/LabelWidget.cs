@@ -14,7 +14,7 @@ public class LabelWidget : Widget
     {
         position = new Vec2(x, y);
         size = new Vec2(w, h);
-        text = text;
+        this.text = text;
     }
 
     public override void draw(DrawTool tool)

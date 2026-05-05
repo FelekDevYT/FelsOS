@@ -6,8 +6,8 @@ public abstract class Widget : IWidget
 {
     public Vec2 position { get; set; }
     public Vec2 size { get; set; }
-    public bool visible { get; set; }
-    public bool enabled { get; set; }
+    public bool visible { get; set; } = true;
+    public bool enabled { get; set; } = true;
     public IWidget Parent { get; set; }
 
     public void getAbsoluteposition(out int x, out int y)

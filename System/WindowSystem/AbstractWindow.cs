@@ -17,12 +17,9 @@ public abstract class AbstractWindow
     
     public bool HandleMouse(int mx, int my, MouseState state)
     {
-        int rx = mx - (int)MouseManager.X;
-        int ry = my - (int)MouseManager.Y;
-
-        if (state == MouseState.Left) return content.onMouseDown(rx, ry);
-        if (state == MouseState.None) content.onMouseUp(rx, ry);
-        content.onMouseMove(rx, ry);
+        if (state == MouseState.Left) return content.onMouseDown(mx, my);
+        if (state == MouseState.None) content.onMouseUp(mx, my);
+        content.onMouseMove(mx, my);
         return false;
     }
 }

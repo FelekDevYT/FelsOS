@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using FenixOS.System.EventSystem;
 using FenixOS.System.EventSystem.events;
+using FenixOS.System.modes.gui;
 using FenixOS.System.WindowSystem.widget;
 using NotImplementedException = System.NotImplementedException;
 
@@ -8,6 +9,8 @@ namespace FenixOS.System.WindowSystem.apps;
 
 public class TestAbstractWindow : AbstractWindow
 {
+    private int clickCount = 0;
+    
     public TestAbstractWindow()
     {
         content = new ContainerWidget();
@@ -20,12 +23,12 @@ public class TestAbstractWindow : AbstractWindow
 
     public override void start()
     {
-        // Kernel.eventManager.registerListener(this);
         WindowBuilder.addLabel(content, "Welcome to test appplication", 0, 0, 100, 100, Color.Black);
-    }
-
-    public override void update(DrawTool tool)
-    {
-        tool.drawRectange(Color.OrangeRed, 0, 0, 100, 100);
+        WindowBuilder.addButton(content, "Click Me!", 10, 40, 120, 30, () =>
+        {
+            clickCount++;
+            WindowBuilder.addLabel(content, "Button clicked: " + clickCount, 500, 500 + (clickCount * 20), 400, 20, Color.Black);
+            GUIMode.redrawManager.requestFullRedraw();
+        });
     }
 }
