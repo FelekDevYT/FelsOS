@@ -1,4 +1,6 @@
  
+using FenixOS.System.utils;
+
 namespace UniLua
 {
 	using System.Collections.Generic;
@@ -424,7 +426,7 @@ namespace UniLua
 				sb.Append( s );
 				lua.Pop( 1 );
 			}
-			Console.WriteLine( sb.ToString() );
+			IO.println(sb.ToString());
 			return 0;
 		}
 

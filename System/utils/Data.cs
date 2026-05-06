@@ -6,7 +6,7 @@ namespace FenixOS.System.utils;
 public class Data
 {
     public static String OS_NAME = "Fenix OS";
-    public static String OS_VERSION = "Alpha 2.3";
+    public static String OS_VERSION = "Alpha 3.1";
     public static String OS_FULL = OS_NAME + " " + OS_VERSION;
     
     public static int SCREEN_WIDTH = 1920;

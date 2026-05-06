@@ -61,6 +61,8 @@ public class CLIMode : IMode
         cmd.registerCommand(new MkDirCommand());
         cmd.registerCommand(new RmCommand());
         cmd.registerCommand(new DiskInfoCommand());
+        cmd.registerCommand(new STECommand());
+        cmd.registerCommand(new LuaCommand());
         cmd.registerCommand(new ShutdownCommand());
         cmd.registerCommand(new RebootCommand());
         cmd.registerCommand(new CatCommand());

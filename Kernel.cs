@@ -6,6 +6,8 @@ using FenixOS.System.EventSystem.events;
 using FenixOS.System.modes;
 using FenixOS.System.modes.cli;
 using FenixOS.System.modes.gui;
+using FenixOS.System.modes.panic;
+using FenixOS.System.utils;
 using Sys = Cosmos.System;
 
 namespace FenixOS
@@ -44,7 +46,14 @@ namespace FenixOS
 
         protected override void Run()
         {
-            currentMode.update();
+            try
+            {
+                currentMode.update();
+            }
+            catch (Exception e)
+            {
+                currentMode = new PanicMode(e.Message, e.HResult);
+            }
         }
     }
 }
