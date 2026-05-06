@@ -37,6 +37,10 @@ public class GUIMode : IMode
         
         windowManager.addWindow(new TestAbstractWindow());
         windowManager.addWindow(new TerminalWindow());
+        
+        panel.RegisterApp(new TerminalApp());
+        panel.RegisterApp(new TestAbstractApp());
+        
         timer = new FPSTimer();
 
         redrawManager = new RedrawManager();
@@ -47,27 +51,50 @@ public class GUIMode : IMode
     {
         timer.Update();
         cursor.genBackground(canvas);
+        
+        var activeWin = windowManager.getWindows()[windowManager.getActiveIndex()];
 
-        if (MouseManager.MouseState == MouseState.Left || MouseManager.LastMouseState == MouseState.Left)
+        if (MouseManager.MouseState == MouseState.Left && MouseManager.LastMouseState != MouseState.Left)
         {
             int mx = (int)MouseManager.X;
             int my = (int)MouseManager.Y;
-            int panelClick = panel.checkClick(mx, my, windowManager.getWindows().Count);
-            if (panelClick != -1) windowManager.setActive(panelClick);
-            var activeWin = windowManager.getWindows()[windowManager.getActiveIndex()];
-            activeWin.HandleMouse(mx, my, MouseManager.MouseState);
+            
+            bool appLaunched = false;
+            object result = panel.checkClick(mx, my, windowManager.getWindows().Count, out appLaunched);
+            
+            if (appLaunched && result is IApp app)
+            {
+                windowManager.addWindow(app.CreateInstance());
+            }
+            else if (result is int panelIdx && panelIdx >= 0)
+            {
+                windowManager.setActive(panelIdx);
+                activeWin = windowManager.getWindows()[windowManager.getActiveIndex()];
+            }
+            else
+            {
+                activeWin.HandleMouse(mx, my, MouseState.Left);
+            }
         }
-        
-        var currentActiveWin = windowManager.getWindows()[windowManager.getActiveIndex()];
+        else if (MouseManager.MouseState == MouseState.Left)
+        {
+            activeWin.HandleMouse((int)MouseManager.X, (int)MouseManager.Y, MouseState.Left);
+        }
+        else
+        {
+            activeWin.HandleMouse((int)MouseManager.X, (int)MouseManager.Y, MouseState.None);
+        }
+
         if (MouseManager.ScrollDelta != 0)
         {
-            currentActiveWin.handleMouseScroll(0, MouseManager.ScrollDelta);
+            activeWin.handleMouseScroll(0, MouseManager.ScrollDelta);
         }
         if (KeyboardManager.TryReadKey(out var key))
         {
-            currentActiveWin.handleKeyboard(key);
+            activeWin.handleKeyboard(key);
         }
-        currentActiveWin.tick();
+        
+        activeWin.tick();
 
         bool needsRender = redrawManager.needsFullRedraw;
         redrawManager.tick();
@@ -79,8 +106,6 @@ public class GUIMode : IMode
             panel.draw(canvas, windowManager.getWindows(), windowManager.getActiveIndex());
         }
 
-        //canvas.DrawFilledRectangle(Color.Blue, 8, 8, 100, 20);
-        //canvas.DrawString("FPS: " + timer.getFps(), Cosmos.System.Graphics.Fonts.PCScreenFont.Default, Color.White, 10, 10);
         cursor.draw(canvas, (int)MouseManager.X, (int)MouseManager.Y);
         canvas.Display();
         
